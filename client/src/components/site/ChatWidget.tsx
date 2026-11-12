@@ -58,7 +58,8 @@ export function ChatWidget() {
   // A different account on the same browser starts a fresh conversation.
   useEffect(() => { setConversation({ language: languageRef.current, messages: [] }); }, [userId]);
 
-  if (!status.data?.chat) return null;
+  if (status.data && !status.data.chat) return null;
+  const chatConfig = status.data ?? { available: false, chat: true, audience: 'PUBLIC', suggestions: [] };
 
   const send = (content: string) => {
     const clean = content.trim().slice(0, 1000);
@@ -73,7 +74,7 @@ export function ChatWidget() {
   return (
     <>
       {!open && (
-        <button onClick={() => setOpen(true)} aria-label={t('Ask the BloodBridge assistant')} className="no-print fixed bottom-4 right-4 z-40 flex h-14 cursor-pointer items-center gap-2 rounded-full bg-brand-600 pl-4 pr-5 text-sm font-bold text-white shadow-glow transition hover:bg-brand-700">
+        <button onClick={() => setOpen(true)} aria-label={t('Ask the BloodBridge assistant')} className="no-print fixed bottom-4 right-4 z-50 flex h-14 cursor-pointer items-center gap-2 rounded-full bg-brand-600 pl-4 pr-5 text-sm font-bold text-white shadow-[0_0_20px_rgba(207,42,47,0.6),0_0_60px_rgba(207,42,47,0.2)] ring-2 ring-white/20 transition hover:bg-brand-700 hover:ring-white/40">
           <MessageCircle className="size-5" /> <span className="hidden sm:inline">{t('Ask us')}</span>
         </button>
       )}
@@ -82,7 +83,7 @@ export function ChatWidget() {
           <header className="flex items-center justify-between gap-3 bg-gradient-to-r from-brand-700 to-wine-900 px-5 py-4 text-white">
             <div>
               <p className="font-extrabold">{t('BloodBridge Assistant')}</p>
-              <p className="text-xs text-brand-100">{t(status.data.available ? 'AI assistant. Not medical advice.' : 'Site guide. Not medical advice.')}</p>
+              <p className="text-xs text-brand-100">{t(chatConfig.available ? 'AI assistant. Not medical advice.' : 'Site guide. Not medical advice.')}</p>
             </div>
             <div className="flex items-center gap-2">
               <LanguageSelector className="[&_select]:h-9 [&_select]:max-w-28 [&_select]:border-white/30 [&_select]:bg-white/10 [&_select]:px-2 [&_select]:text-xs [&_select]:text-white [&_select]:focus:ring-white/60 [&_option]:text-ink-900" />
@@ -92,9 +93,9 @@ export function ChatWidget() {
           <div className="flex-1 space-y-3 overflow-y-auto bg-ink-50 p-4" aria-live="polite">
             {msgs.length === 0 && (
               <div>
-                <p className="text-sm text-ink-600">{t(GREETING[status.data.audience] ?? GREETING.PUBLIC)}</p>
+                <p className="text-sm text-ink-600">{t(GREETING[chatConfig.audience] ?? GREETING.PUBLIC)}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {status.data.suggestions.map((s) => <button key={s} onClick={() => send(t(s))} className="cursor-pointer rounded-full border border-brand-200 bg-white px-3 py-1.5 text-xs font-semibold text-brand-700 hover:bg-brand-50">{t(s)}</button>)}
+                  {chatConfig.suggestions.map((s) => <button key={s} onClick={() => send(t(s))} className="cursor-pointer rounded-full border border-brand-200 bg-white px-3 py-1.5 text-xs font-semibold text-brand-700 hover:bg-brand-50">{t(s)}</button>)}
                 </div>
               </div>
             )}

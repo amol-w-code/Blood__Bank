@@ -105,3 +105,47 @@ body {
   .rise-in { animation: rise-in .35s cubic-bezier(.2,.8,.2,1) both; }
 }
 dialog::backdrop { backdrop-filter: blur(3px); }
+
+/* ─── 3D Landing Page Animations ─────────────────────────────────── */
+
+@keyframes hero-fade-in {
+  from { transform: translateY(30px) translateZ(-30px); opacity: 0; }
+  to { transform: translateY(0) translateZ(0); opacity: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-fade-in { animation: hero-fade-in 0.8s cubic-bezier(.2,.8,.2,1) both; }
+}
+
+@keyframes float-3d {
+  0%, 100% { transform: rotateX(5deg) rotateY(-5deg) translateZ(0); }
+  50% { transform: rotateX(-5deg) rotateY(5deg) translateZ(20px); }
+}
+
+@keyframes blood-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(200, 0, 0, 0.3); }
+  50% { box-shadow: 0 0 50px rgba(200, 0, 0, 0.5), 0 0 80px rgba(200, 0, 0, 0.2); }
+}
+
+.blood-drop-3d {
+  animation: float-3d 5s ease-in-out infinite;
+}
+
+/* Heartbeat animation for the hero section */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.15); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.1); }
+  56% { transform: scale(1); }
+}
+
+.hero-3d-section {
+  /* No negative margin — the header sits above naturally */
+}
+
+/* Vein-like subtle background pattern */
+.vein-bg {
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(120, 0, 0, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(120, 0, 0, 0.04) 0%, transparent 50%);
+}
